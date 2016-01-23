@@ -1,0 +1,60 @@
+web:
+  restart: always
+  build: ./web
+  expose:
+    - "8000"
+  links:
+    - postgres:postgres
+#    - redis:redis
+  volumes:
+    - ./web:/web
+    - ./notebook/ssl:/notebook/ssl
+  env_file: .env
+#  command: /usr/local/bin/python manage.py runserver -h 0.0.0.0 -p 8000
+# --reload True
+  command: /usr/local/bin/gunicorn --reload -w 2 -b :8000 project:app
+
+nginx:
+  restart: always
+  build: ./nginx/
+  ports:
+    - "80:80"
+    - "443:443"
+  volumes:
+    - ./web/project/static:/static
+    - ./nginx/ssl:/etc/nginx/ssl
+    - ./nginx/logs:/etc/nginx/logs
+  volumes_from:
+    - web
+  links:
+    - web:web
+
+data:
+  image: postgres:latest
+  volumes:
+    - /var/lib/postgresql
+  command: "true"
+
+postgres:
+  restart: always
+  image: postgres:latest
+  volumes:
+    - ./db_backup:/db_backup
+  volumes_from:
+    - data
+  ports:
+    - "5432:5432"
+
+#redis:
+#    image: redis:2.8.19
+#    ports:
+#        - "6379:6379"
+
+#scipy:
+#  restart: always
+#  build: ./notebook
+#  expose:
+#    - "8888"
+#  volumes:
+#    - ./notebook:/notebook
+#  command: jupyter/scipy-notebook start-notebook.sh --NotebookApp.base_url=/notebook

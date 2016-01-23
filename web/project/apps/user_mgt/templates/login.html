@@ -1,0 +1,37 @@
+{% extends "base/_base.html" %}
+{% block content %}
+
+    <body class=" login">
+        <div class="menu-toggler sidebar-toggler"></div>
+        <div class="content">
+            <form class="login-form" method="post">
+                {{ form.hidden_tag() }}
+                <h3 class="form-title font-green">Sign In</h3>
+                <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    <span> Enter any username and password. </span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">Username</label>
+                    {{ form.username(class="form-control placeholder-no-fix",autocomplete="off", placeholder="Username") }}
+                    <p class="text-danger">
+                        {{ form.username.errors[0] }}
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">Password</label>
+                    {{ form.password(class="form-control placeholder-no-fix",autocomplete="off", placeholder="Password") }}
+                    <p class="text-danger">
+                        {{ form.password.errors[0] }}
+                    </p>
+                </div>
+                <div class="form-actions">
+                    <label class="rememberme check">
+                        {{ form.remember_me() }} {{ form.remember_me.label }} </label>
+                    <button type="submit" class="btn green uppercase pull-right">Login</button>
+                </div>
+            </form>
+        </div>
+    </body>
+
+{% endblock %}
