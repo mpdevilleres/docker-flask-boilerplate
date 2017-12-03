@@ -1,6 +1,6 @@
-##Dockerizing Flask Boilerplate
+## Dockerizing Flask Boilerplate
 
-###Specification
+### Specification
  - Docker
  - Docker-Compose
  - Flask (python 3)
@@ -8,7 +8,7 @@
  - Postgresql
  - Redis
 
-##Folder Structure
+## Folder Structure
 
     Main
      |--- /nginx
@@ -40,12 +40,12 @@
      |--- docker-compose.yml
      |--- README.md
 
-###Install/Configure Docker
+### Install/Configure Docker
 
     $ curl -sSL https://get.docker.com/ | sh
     $ pip install docker-compose
 
-###Create ".env" file on the Main Folder - this file contains all OS level environment variables ()
+### Create ".env" file on the Main Folder - this file contains all OS level environment variables ()
     
     #sample .env file
     DEBUG=False
@@ -60,11 +60,11 @@
     APP_SETTINGS=project.config.ProductionConfig  
     NOTEBOOK_PASSWORD='sha1:0c80a71d63da:a1ca534342f6cdbe8e71c80f06f1fcc0011bd55b'    
 
-###Create SSL
+### Create SSL
 
     Soon
     
-###Configuration
+### Configuration
 
     # Change postgres password (Security Reasons), Add User for the application
     $ psql -h 127.0.0.1 -p 5432 -U postgres --password
@@ -75,22 +75,22 @@
 
     $ docker-compose run web /usr/local/bin/python manage.py create_db
 
-###Postgres Backup
+### Postgres Backup
 
     $ docker exec -it suite_postgres_1 \
       sh -c "pg_dump -U postgres_user postgres_dbname | gzip > /postgres/backup/dump_`date +%d-%m-%Y"_"%H_%M_%S`.gz"
 
-###Postgres Restore
+### Postgres Restore
 
     $ docker exec -it suite_postgres_1 \
         sh -c "gunzip -c /postgres/backup/filename.gz | psql -U postgres_user postgres_dbname"
 
-###Execute Raw sql with flask-SqlAlchemy
+### Execute Raw sql with flask-SqlAlchemy
     
     from project import db
     db.engine.execute("ALTER SEQUENCE team_tasks_id_seq RESTART WITH 2001;")
 
-###Create /.env for environmental variables
+### Create /.env for environmental variables
 
     DEBUG=False
     SECRET_KEY=5(15ds+i2+%ik6z&!yer+ga9m=e%jcqiz_5wszg)r-z!2--b2d
@@ -102,7 +102,7 @@
 
     APP_SETTINGS=project.config.ProductionConfig
 
-###sample merging for pandas for data analysis
+### Sample merging for pandas for data analysis
     
     from project.models import User, UserGroup
     import pandas as pd
@@ -133,7 +133,7 @@
     
 
 
-###Handy Snippets
+### Handy Snippets
 
 - KILL ALL DOCKER CONTAINER
 
@@ -150,14 +150,14 @@
 
     $ netstat -tuplen
 
-###Deployment Note
+### Deployment Note
     git clone -b <branch> <repo> <foldername>
     copy .env to the Host
     copy SSL Certs
     copy static files
     update DB
 
-###References
+### References
 * <https://docs.docker.com/installation/centos>
 * <http://containertutorials.com/docker-compose/nginx-flask-postgresql.html>
 * <https://realpython.com/blog/python/dockerizing-flask-with-compose-and-machine-from-localhost-to-the-cloud>
